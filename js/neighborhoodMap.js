@@ -5,9 +5,8 @@ function AppViewModel() {
 
 function initialize() {
 
-  var latitude = 37.3541667;
-  var longitude = -121.9541667;
-
+  var latitude = -33.8665433;
+  var longitude = 151.1956316;
   var pyrmont = new google.maps.LatLng(latitude,longitude);
 
   map = new google.maps.Map(document.getElementById('map-canvas'), {
@@ -58,7 +57,7 @@ function createMarker(place) {
 
 // End Google Map
 
-	this.location = ko.observable("Santa Clara");
+	this.location = ko.observable("Santa Barbara");
 	google.maps.event.addDomListener(window, 'load', initialize);
 }
 

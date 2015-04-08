@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Search List with KO</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src='knockout-3.3.0.js'></script>
+	<script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+   </head>
+
+   	<style>
+		html, body, #map-canvas {
+		  height: 100%;
+		  margin: 0;
+		}
+	</style>
+<body>
+
+<header> 
+    <form action="#"> 
+        <input placeholder="Search…" type="search" name="q" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off"> 
+    </form> 
+</header> 
+
+<div class="content"> 
+    <ul data-bind="template: {name:'location', foreach:locations}"> 
+    </ul> 
+</div> 
+
+<div id="panel">
+      <input onclick="clearMarkers();" type=button value="Hide Markers">
+      <input onclick="showMarkers();" type=button value="Show All Markers">
+      <input onclick="deleteMarkers();" type=button value="Delete Markers">
+    </div>
+
+<div id="map-canvas"></div>
+
+<script type="text/html" id="location"> 
+    <li>
+        <strong data-bind="text: name"></strong> –
+        <span data-bind="text: facts"></span>  
+    </li>
+</script> 
+
+<script>
+
+// Display map
+$(document).ready(function(){
+
+    var mapOptions = {
+        center: new google.maps.LatLng(37.353966, -121.952999),
+        zoom: 12,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+    //Create Markers------------------------------------------------
+
+    
+    var marker1 = new google.maps.Marker({
+        position: new google.maps.LatLng(37.325885, -121.945375),
+        map: map
+    });
+
+    var marker2 = new google.maps.Marker({
+        position: new google.maps.LatLng(37.349952, -121.940608),
+        map: map,
+    });
+
+    var marker3 = new google.maps.Marker({
+        position: new google.maps.LatLng(37.319707, -121.947352),
+        map: map,
+    });
+
+    var marker4 = new google.maps.Marker({
+        position: new google.maps.LatLng(37.397946, -121.974294),
+        map: map,
+    });
+
+    var marker5 = new google.maps.Marker({
+        position: new google.maps.LatLng(37.318380, -121.950978),
+        map: map,
+    });
+
+    var markers = [marker1, marker2, marker3, marker4, marker5];
+    console.log(markers[0]);
+
+    // From Google API:-----------------------------------------
+    // https://developers.google.com/maps/documentation/javascript/examples/marker-remove
+    
+    // Add a marker to the map and push to the array.
+    function addMarker(location) {
+      var marker = new google.maps.Marker({
+        position: location,
+        map: map
+      });
+      markers.push(marker);
+    }
+
+    // Sets the map on all markers in the array.
+    function setAllMap(map) {
+      for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+      }
+    }
+
+    // Removes the markers from the map, but keeps them in the array.
+    function clearMarkers() {
+      setAllMap(null);
+    }
+
+    // Shows any markers currently in the array.
+    function showMarkers() {
+      setAllMap(map);
+    }
+
+    // Deletes all markers in the array by removing references to them.
+    function deleteMarkers() {
+      clearMarkers();
+      markers = [];
+    }
+
+    //End Google API functions--------------------------------
+
+
+    //End Create Markers------------------------------------------------
+
+    // Model:
+
+    var contentString = "<div style='height: 400px; width: 400px;'><img src='https://cdn3.gbot.me/photos/OV/50/1325969363/-Postcard_of_Westfield_Val-20000000002379950-500x375.jpg'></div>";
+
+    var infowindow = new google.maps.InfoWindow({
+          content: contentString
+      });
+
+    google.maps.event.addListener(marker1, 'click', function() {
+        infowindow.open(map,marker1);
+      });
+
+
+    var locations = [
+        {
+        name: "Valley Fair Mall",
+        facts: "Westfield Valley Fair is one of the largest malls in Northern California",
+        marker: marker1,
+        lat: 37.325885,
+        lon: -121.945375},
+    {
+        name: "Santa Clara University",
+        facts: "Bell's",
+        marker: marker2,
+        lat: 37.349952,
+        lon: -121.940608},
+    {
+        name: "Santana Row",
+        facts: "Bell's",
+        marker: marker3,
+        lat: 37.319707,
+        lon: -121.947352},
+    {
+        name: "Great America Parkway",
+        facts: "Bell's",
+        marker: marker4,
+        lat: 37.397946,
+        lon: -121.974294},
+    {
+        name: "Winchester Mystery House",
+        facts: "New Holland Brewing Company",
+        marker: marker5,
+        lat: 37.318380,
+        lon: -121.950978}
+        ];
+
+
+    //Knockout ViewModel
+
+    var viewModel = {
+        query: ko.observable('')
+    };
+
+    viewModel.locations = ko.dependentObservable(function() {
+        var search = this.query().toLowerCase();
+        return ko.utils.arrayFilter(locations, function(location) {
+            return location.name.toLowerCase().indexOf(search) >= 0;
+        });
+    }, viewModel);
+
+    ko.applyBindings(viewModel);
+
+
+});
+
+
+//End display map
+
+//--Flickr images
+
+(function() {
+  var flickerAPI = "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
+  $.getJSON( flickerAPI, {
+    tags: "santa clara university",
+    tagmode: "any",
+    format: "json"
+  })
+    .done(function( data ) {
+      $.each( data.items, function( i, item ) {
+        $( "<img>" ).attr( "src", item.media.m ).appendTo( "#images" );
+        if ( i === 3 ) {
+          return false;
+        }
+      });
+    });
+})();
+
+//--End images
+
+
+
+</script>

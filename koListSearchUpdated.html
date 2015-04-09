@@ -29,12 +29,6 @@
     </ul> 
 </div> 
 
-<div id="panel">
-      <input onclick="clearMarkers();" type=button value="Hide Markers">
-      <input onclick="showMarkers();" type=button value="Show All Markers">
-      <input onclick="deleteMarkers();" type=button value="Delete Markers">
-    </div>
-
 <div id="map-canvas"></div>
 
 <script type="text/html" id="location"> 
@@ -59,7 +53,6 @@ $(document).ready(function(){
 
     //Create Markers------------------------------------------------
 
-    
     var marker1 = new google.maps.Marker({
         position: new google.maps.LatLng(37.325885, -121.945375),
         map: map
@@ -85,12 +78,13 @@ $(document).ready(function(){
         map: map,
     });
 
-    var markers = [marker1, marker2, marker3, marker4, marker5];
-    console.log(markers[0]);
+
+  //  var markers = [marker1, marker2, marker3, marker4, marker5];
+
 
     // From Google API:-----------------------------------------
     // https://developers.google.com/maps/documentation/javascript/examples/marker-remove
-    
+/*    
     // Add a marker to the map and push to the array.
     function addMarker(location) {
       var marker = new google.maps.Marker({
@@ -122,9 +116,8 @@ $(document).ready(function(){
       clearMarkers();
       markers = [];
     }
-
+*/
     //End Google API functions--------------------------------
-
 
     //End Create Markers------------------------------------------------
 
@@ -185,6 +178,7 @@ $(document).ready(function(){
         var search = this.query().toLowerCase();
         return ko.utils.arrayFilter(locations, function(location) {
             return location.name.toLowerCase().indexOf(search) >= 0;
+            //return location.marker.indexOf(search) >= 0;
         });
     }, viewModel);
 
@@ -195,28 +189,5 @@ $(document).ready(function(){
 
 
 //End display map
-
-//--Flickr images
-
-(function() {
-  var flickerAPI = "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
-  $.getJSON( flickerAPI, {
-    tags: "santa clara university",
-    tagmode: "any",
-    format: "json"
-  })
-    .done(function( data ) {
-      $.each( data.items, function( i, item ) {
-        $( "<img>" ).attr( "src", item.media.m ).appendTo( "#images" );
-        if ( i === 3 ) {
-          return false;
-        }
-      });
-    });
-})();
-
-//--End images
-
-
 
 </script>

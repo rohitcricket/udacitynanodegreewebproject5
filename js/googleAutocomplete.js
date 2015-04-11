@@ -1,9 +1,10 @@
 function initialize() {
+
   var mapOptions = {
-    center: new google.maps.LatLng(37.3541667, -121.9541667),
-    zoom: 15
-  };
-  var map = new google.maps.Map(document.getElementById('map-canvas'),
+      center: new google.maps.LatLng(37.325885, -121.945375),
+      zoom: 13
+    };
+  var map = new google.maps.Map(document.getElementById('map-canvas2'),
     mapOptions);
 
   var input = /** @type {HTMLInputElement} */(
@@ -75,4 +76,4 @@ function initialize() {
   setupClickListener('changetype-geocode', ['geocode']);
 }
 
-google.maps.event.addDomListener(window, 'load', initialize)
+google.maps.event.addDomListener(window, 'load', initialize);

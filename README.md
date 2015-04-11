@@ -11,6 +11,8 @@ Next, I recommend you visit YouTube for a great tutorial on how to build your ow
 
 Once you learn how to add various components into a map, visit knockoujs.com to learn about knockout. Knockout is a JavaScript library that helps you to create rich, responsive display with a simple underlying data model. Any time you have sections of UI that update dynamically, KO can help you implement it more simply and maintainably. The tutorials are great! However, I am not sure if KO is the best solution for working with Google API for this project, but it is a good, simple way to learn data binding. 
 
+Also, I used Materialize CSS framework. I like the colors and the responsive design and am just trying out. Let me know what you think of this framework. You can find more information at http://materializecss.com/.
+
 Searching and Filtering
 
 The application has a search/filter option on the existing map markers that are already displayed. These markers are a list of my favorite places in my neighborhood.
